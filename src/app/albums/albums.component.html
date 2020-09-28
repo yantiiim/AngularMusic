@@ -1,0 +1,60 @@
+<br><br>
+<div class="row">
+    <div class="col-md-12">
+        <section class="my-5">
+            <form [formGroup]="addAlbumsForm" (ngSubmit)="simpanAlbums()">
+                <div class="form-group">
+                    <label for="kode">ID Album :</label>
+                    <input type="text" class="form-control" id="id" formControlName="idAlbum" placeholder="ID">
+                    <span
+                        *ngIf="!addAlbumsForm.get('idAlbum').valid && addAlbumsForm.get('idAlbum').touched" class="help-block">
+                    ID Wajib Diisi
+                    </span>
+                </div>
+                <div class="form-group">
+                    <label for="nama">Nama Albums :</label>
+                    <input type="text" class="form-control" id="nama" formControlName="namaAlbums" placeholder="nama">
+                    <span
+                        *ngIf="!addAlbumsForm.get('namaAlbums').valid && addAlbumsForm.get('namaAlbums').touched" class="help-block">
+                    Nama Wajib Diisi
+                    </span>
+                </div>
+                <div class="form-group">
+                    <label for="nama">Nama Label:</label>
+                    <select class="form-control" formControlName="idLabel">
+                        <option *ngFor="let lab of listLables" value="{{ lab.idLabel }}">{{ lab.namaLabels }}</option>
+                    </select>
+                    <span *ngIf="!addAlbumsForm.get('idLabel').valid && addAlbumsForm.get('idLabel').touched" class="help-block">
+                      Nama Wajib Diisi!
+                    </span>
+                </div>
+                <div class="form-group">
+                    <label for="nama">Nama Artis:</label>
+                    <select class="form-control" formControlName="idArtis">
+                        <option *ngFor="let ar of listArtis" value="{{ ar.idArtis }}">{{ ar.namaArtis }}</option>
+                    </select>
+                    <span *ngIf="!addAlbumsForm.get('idArtis').valid && addAlbumsForm.get('idArtis').touched" class="help-block">
+                      Nama Wajib Diisi!
+                    </span>
+                </div>
+                <div class="form-group">
+                    <label for="foto">Foto Cover:</label>
+                    <input type="file" (change)="selectFile($event)">
+                    <span
+                        *ngIf="!addAlbumsForm.get('fotoCover').valid && addAlbumsForm.get('fotoCover').touched" class="help-block">
+                    Foto Wajib Diisi
+                    </span>
+                </div>
+                <div class="form-group">
+                    <label for="ket">Keterangan :</label>
+                    <input type="text" class="form-control" id="Keterangan" formControlName="keterangan" placeholder="keterangan">
+                    <span
+                        *ngIf="!addAlbumsForm.get('keterangan').valid && addAlbumsForm.get('keterangan').touched" class="help-block">
+                    Keterangan Wajib Diisi
+                    </span>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </section>
+    </div>
+</div>

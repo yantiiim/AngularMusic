@@ -1,0 +1,50 @@
+<br><br>
+<div class="row">
+    <div class="col-md-12">
+        <section class="my-5">
+            <form [formGroup]="addArtisForm" (ngSubmit)="simpanArtis()">
+                <div class="form-group">
+                    <label for="kode">ID Artis :</label>
+                    <input type="text" class="form-control" id="id" formControlName="idArtis" placeholder="ID">
+                    <span
+                        *ngIf="!addArtisForm.get('idArtis').valid && addArtisForm.get('idArtis').touched" class="help-block">
+                    ID Wajib Diisi
+                    </span>
+                </div>
+                <div class="form-group">
+                    <label for="nama">Nama Artis :</label>
+                    <input type="text" class="form-control" id="nama" formControlName="namaArtis" placeholder="nama">
+                    <span
+                        *ngIf="!addArtisForm.get('namaArtis').valid && addArtisForm.get('namaArtis').touched" class="help-block">
+                    Nama Wajib Diisi
+                    </span>
+                </div>
+                <div class="form-group">
+                    <label for="foto">Foto :</label>
+                    <input type="file" (change)="selectFile($event)">
+                    <span
+                        *ngIf="!addArtisForm.get('foto').valid && addArtisForm.get('foto').touched" class="help-block">
+                    Foto Wajib Diisi
+                    </span>
+                </div>
+                <div class="form-group">
+                    <label for="url">URL Website :</label>
+                    <input type="text" class="form-control" id="urlWebsite" formControlName="urlWebsite" placeholder="url website">
+                    <span
+                        *ngIf="!addArtisForm.get('urlWebsite').valid && addArtisForm.get('urlWebsite').touched" class="help-block">
+                    URL Website Wajib Diisi
+                    </span>
+                </div>
+                <div class="form-group">
+                    <label for="ket">Keterangan :</label>
+                    <input type="text" class="form-control" id="Keterangan" formControlName="keterangan" placeholder="keterangan">
+                    <span
+                        *ngIf="!addArtisForm.get('keterangan').valid && addArtisForm.get('keterangan').touched" class="help-block">
+                    Keterangan Wajib Diisi
+                    </span>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </section>
+    </div>
+</div>
