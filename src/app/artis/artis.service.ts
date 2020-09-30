@@ -56,5 +56,6 @@ export class ArtisService{
 
         return this.httpKlien.request(req);
     }
+    
 
 }

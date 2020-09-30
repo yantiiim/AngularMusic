@@ -28,6 +28,11 @@ export class GenreService{
         .pipe(map(data => data as Genre));
     }
 
+    deleteGenre(id): Observable<any>{
+        return this.httpKlien.delete(environment.baseUrl + '/delete/'+id)
+        .pipe(map(data => data))
+    }
+
     getListGenreAll(parameter: Map<string, any>, dataTablesParameters: any): Observable<DataTablesResponse> {
         const dtReq = new DatatablesRequest();
         dtReq.draw = dataTablesParameters.draw;

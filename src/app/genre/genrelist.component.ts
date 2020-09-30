@@ -2,7 +2,10 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
+import { Genre } from './genre';
 import { GenreService } from './genre.service';
+import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-home',
@@ -17,8 +20,9 @@ export class GenreListComponent implements OnInit, AfterViewInit {
     dtOptions: any = {};
     dtTrigger: Subject<any> = new Subject();
     cariForm: FormGroup;
+    listGenre: Genre[];
 
-    constructor(private genreService: GenreService){
+    constructor(private genreService: GenreService, private router: Router){
 
     }
 
@@ -29,42 +33,12 @@ export class GenreListComponent implements OnInit, AfterViewInit {
             namaGenre: new FormControl('')
         });
 
-        const that = this;
-        this.dtOptions = {
-            ajax: (dataTablesParameters: any, callback) => {
-                const parameter = new Map<string, any>();
-                parameter.set('namaGenre', this.cariForm.controls.namaGenre.value);
-                that.genreService.getListGenreAll(parameter, dataTablesParameters).subscribe(resp => {
-                    callback({
-                        recordsTotal: resp.recordsTotal,
-                        recordsFiltered: resp.recordsFiltered,
-                        data: resp.data,
-                        draw: resp.draw
-                    })
-                })
-            },
-            serverSide: true,
-            processing: true,
-            filter: false,
-            columns: [{
-                title: 'ID',
-                data: 'idGenre',
-                orderable: false
-            }, {
-                title: 'Name',
-                data: 'namaGenre'
-            }, {
-                title: 'Action',
-                orderable: false,
-                render(data, type, row) {
-                    return '<a href="editmethod/${row.idGenre}" class="btn btn-warning btn-xs edit" data-element-id="${row.idGenre}"><i class ="glyphicon glyphicon-edit">Edit</i></a>'
-                }
-            }],
-            rowCallback(row, data, dataIndex) {
-                const idx = ((this.api().page()) * this.api().page.len()) + dataIndex + 1;
-                $('td:eq(0)', row).html('<b>' + idx + '</b>');
-                }
-        };
+        this.genreService.listGenre().subscribe((data)=>{
+            console.log(data);
+            this.listGenre=data;
+            }, error => {
+                console.log(error);
+            })
         
 
     }
@@ -79,8 +53,42 @@ export class GenreListComponent implements OnInit, AfterViewInit {
         });
     }
 
-ngAfterViewInit() {
-    
-}
+    ngAfterViewInit() {
+        
+    }
+
+  deleteGenre(id : number) {
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger'
+      },
+      buttonsStyling: false,
+    });
+    swalWithBootstrapButtons.fire({
+      title: 'Are you sure?',
+      text: 'You want to remove the Catalog!',
+      icon: 'warning',
+      // type: 'warning'
+      showCancelButton: true,
+      showCloseButton: true,
+      confirmButtonText: 'Yes, delete!',
+      cancelButtonText: 'No, cancel!',
+      reverseButtons: true
+    }).then((result) => {
+    console.log(`Delete Data By Id:` + id );
+        if (result.value) {
+            this.genreService.deleteGenre(id).subscribe(data => {
+                console.log(data);
+                this.refresh();
+            });
+        }
+    });
+  }
+
+  refresh(): void {
+    window.location.reload();
+  }
+
 
 }

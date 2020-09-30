@@ -33,7 +33,7 @@ import { GenreService } from './genre.service';
           this.addGenreForm.get('idGenre').setValue(data.idGenre);
           this.addGenreForm.get('namaGenre').setValue(data.namaGenre);
         }, error => {
-          alert("Data Tidak Ditemukan !");
+          console.log(error);
         });
       });
     }

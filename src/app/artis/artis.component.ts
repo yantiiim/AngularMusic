@@ -45,13 +45,13 @@ import { ArtisService } from './artis.service';
       });
     }
   
-    simpanArtis(): void {
-      this.upload();
+    simpanArtis(namaFile): void {
+      
       console.log(this.addArtisForm.value);
       let art = new Artis();
       art.idArtis = this.addArtisForm.value.idArtis;
       art.namaArtis = this.addArtisForm.value.namaArtis;
-      art.foto = this.addArtisForm.value.foto;
+      art.foto = namaFile;
       art.urlWebsite = this.addArtisForm.value.urlWebsite
       art.keterangan = this.addArtisForm.value.keterangan;
       this.artisService.insertArtis(art).subscribe((data) => {
@@ -75,6 +75,7 @@ import { ArtisService } from './artis.service';
             this.progress = Math.round( 100 * event.loaded / event.total);
           }else if (event instanceof HttpResponse) {
             console.log(event.body);
+            this.simpanArtis(event.body.namaFile);
           }
         },
         err => {

@@ -1,13 +1,17 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
+import { Artis } from '../artis/artis';
+import { ArtisService } from '../artis/artis.service';
+import { Albums } from './albums';
 import { AlbumsService } from './albums.service';
 
 @Component({
     selector: 'app-home',
     templateUrl: './albumslist.component.html',
-    providers: [AlbumsService]
+    providers: [AlbumsService, ArtisService]
 })
 
 export class AlbumsListComponent implements OnInit, AfterViewInit {
@@ -17,9 +21,19 @@ export class AlbumsListComponent implements OnInit, AfterViewInit {
     dtOptions: any = {};
     dtTrigger: Subject<any> = new Subject();
     cariForm: FormGroup;
+    listAlbums: Albums[];
+    listArtis: Artis[];
+    alamatGambar: string;
+    form: FormGroup;
+    ids: string;
 
-    constructor(private albumsService: AlbumsService){
-
+    constructor(private albumsService: AlbumsService, private artisService: ArtisService, private activateRoute: ActivatedRoute){
+        // this.albumsService.listAlbums().subscribe((data)=>{
+        //     console.log(data);
+        //     this.listAlbums=data;
+        //     }, error => {
+        //         console.log(error);
+        //     })
     }
 
     
@@ -29,62 +43,44 @@ export class AlbumsListComponent implements OnInit, AfterViewInit {
             namaAlbums: new FormControl('')
         });
 
-        const that = this;
-        this.dtOptions = {
-            ajax: (dataTablesParameters: any, callback) => {
-                const parameter = new Map<string, any>();
-                parameter.set('namaAlbums', this.cariForm.controls.namaAlbums.value);
-                that.albumsService.getListAlbumsAll(parameter, dataTablesParameters).subscribe(resp => {
-                    callback({
-                        recordsTotal: resp.recordsTotal,
-                        recordsFiltered: resp.recordsFiltered,
-                        data: resp.data,
-                        draw: resp.draw
-                    })
-                })
-            },
-            serverSide: true,
-            processing: true,
-            filter: false,
-            columns: [{
-                title: 'ID',
-                data: 'idAlbum',
-                orderable: false
-            }, {
-                title: 'Name',
-                data: 'namaAlbums'
-            }, {
-                title: 'Nama Labels',
-                data: 'namaLabels'
-            }, {
-                title: 'Nama Artis',
-                data: 'namaArtis'
-            }, {
-                title: 'Foto Cover',
-                data: 'fotoCover'
-            }, {
-                title: 'Keterangan',
-                data: 'keterangan'
-            }, {
-                title: 'Action',
-                orderable: false,
-                render(data, type, row) {
-                    return '<a href="editmethod/${row.idAlbum}" class="btn btn-warning btn-xs edit" data-element-id="${row.idAlbum}"><i class ="glyphicon glyphicon-edit">Edit</i></a>'
-                }
-            }],
-            rowCallback(row, data, dataIndex) {
-                const idx = ((this.api().page()) * this.api().page.len()) + dataIndex + 1;
-                $('td:eq(0)', row).html('<b>' + idx + '</b>');
-                }
-        };
+        this.form = new FormGroup( {
+            ids: new FormControl('')
+        });     
         
+        this.artisService.listArtis().subscribe((data)=>{
+            console.log(data);
+            this.listArtis=data;
+            }, error => {
+                console.log(error);
+            })
+        this.activateRoute.params.subscribe( rute => {
+        this.ids = rute.ids;
+        this.albumsService.getAlbumsByArtis(this.ids).subscribe( data => {
+        this.listAlbums = data;
+        }, error => {
+            alert("data kosong");
+            });
+        });
 
+        this.albumsService.listAlbums().subscribe((data)=>{
+            console.log(data);
+            this.listAlbums=data;
+            }, error => {
+                console.log(error);
+            })
     }
 
     ngOnDestroy(): void {
         this.dtTrigger.unsubscribe();
     }
 
+    ambilAlbums(): void{
+        const idArtis = this.form.get("idArtis").value;
+        this.albumsService.getAlbumsByArtis(idArtis).subscribe( data => {
+          this.listAlbums = data;
+        })
+      }
+    
     rerender(): void {
         this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
             dtInstance.draw();
