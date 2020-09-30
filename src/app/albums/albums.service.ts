@@ -33,6 +33,11 @@ export class AlbumsService{
         .pipe(map(data => data as Albums[]));
     }
 
+    deleteAlbums(id): Observable<any>{
+        return this.httpKlien.delete(environment.baseUrl + '/deletealbums/'+id)
+        .pipe(map(data => data))
+    }
+
     getListAlbumsAll(parameter: Map<string, any>, dataTablesParameters: any): Observable<DataTablesResponse> {
         const dtReq = new DatatablesRequest();
         dtReq.draw = dataTablesParameters.draw;

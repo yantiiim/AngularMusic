@@ -38,6 +38,11 @@ export class LaguService{
         .pipe(map(data => data as Lagu[]));
     }
 
+    deleteLagu(id): Observable<any>{
+        return this.httpKlien.delete(environment.baseUrl + '/deletelagu/'+id)
+        .pipe(map(data => data))
+    }
+
     getListLaguAll(parameter: Map<string, any>, dataTablesParameters: any): Observable<DataTablesResponse> {
         const dtReq = new DatatablesRequest();
         dtReq.draw = dataTablesParameters.draw;

@@ -28,6 +28,11 @@ export class ArtisService{
         .pipe(map(data => data as Artis));
     }
 
+    deleteArtis(id): Observable<any>{
+        return this.httpKlien.delete(environment.baseUrl + '/deleteartis/'+id)
+        .pipe(map(data => data))
+    }
+
     getListArtisAll(parameter: Map<string, any>, dataTablesParameters: any): Observable<DataTablesResponse> {
         const dtReq = new DatatablesRequest();
         dtReq.draw = dataTablesParameters.draw;

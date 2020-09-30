@@ -1,7 +1,9 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
+import Swal from 'sweetalert2';
 import { Artis } from './artis';
 import { ArtisService } from './artis.service';
 
@@ -20,7 +22,7 @@ export class ArtisListComponent implements OnInit, AfterViewInit {
     cariForm: FormGroup;
     listArtis: Artis[];
 
-    constructor(private artisService: ArtisService){
+    constructor(private artisService: ArtisService, private router: Router){
 
     }
 
@@ -54,5 +56,38 @@ export class ArtisListComponent implements OnInit, AfterViewInit {
     ngAfterViewInit() {
         
     }
+
+    deleteArtis(id : number) {
+        const swalWithBootstrapButtons = Swal.mixin({
+          customClass: {
+            confirmButton: 'btn btn-success',
+            cancelButton: 'btn btn-danger'
+          },
+          buttonsStyling: false,
+        });
+        swalWithBootstrapButtons.fire({
+          title: 'Are you sure?',
+          text: 'You want to remove the Catalog!',
+          icon: 'warning',
+          // type: 'warning'
+          showCancelButton: true,
+          showCloseButton: true,
+          confirmButtonText: 'Yes, delete!',
+          cancelButtonText: 'No, cancel!',
+          reverseButtons: true
+        }).then((result) => {
+        console.log(`Delete Data By Id:` + id );
+            if (result.value) {
+                this.artisService.deleteArtis(id).subscribe(data => {
+                    console.log(data);
+                    this.refresh();
+                });
+            }
+        });
+      }
+    
+      refresh(): void {
+        window.location.reload();
+      }
 
 }
