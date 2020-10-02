@@ -67,15 +67,15 @@ import { AlbumsService } from './albums.service';
       });
     }
   
-    simpanAlbums(): void {
-      this.upload();
+    simpanAlbums(namaFile): void {
+      
       console.log(this.addAlbumsForm.value);
       let albm = new Albums();
       albm.idAlbum = this.addAlbumsForm.value.idAlbum;
       albm.namaAlbums = this.addAlbumsForm.value.namaAlbums;
       albm.idLabel = this.addAlbumsForm.value.idLabel;
       albm.idArtis = this.addAlbumsForm.value.idArtis;
-      albm.fotoCover = this.addAlbumsForm.value.fotoCover;
+      albm.fotoCover = namaFile;
       albm.keterangan = this.addAlbumsForm.value.keterangan;
       this.albumsService.insertAlbums(albm).subscribe((data) => {
         
@@ -98,6 +98,7 @@ import { AlbumsService } from './albums.service';
             this.progress = Math.round( 100 * event.loaded / event.total);
           }else if (event instanceof HttpResponse) {
             console.log(event.body);
+            this.simpanAlbums(event.body.namaFile);
           }
         },
         err => {

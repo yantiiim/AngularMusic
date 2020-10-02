@@ -2,7 +2,7 @@
 <div class="row">
     <div class="col-md-12">
         <section class="my-5">
-            <form [formGroup]="addAlbumsForm" (ngSubmit)="simpanAlbums()">
+            <form [formGroup]="addAlbumsForm" (ngSubmit)="upload()">
                 <div class="form-group">
                     <label for="kode">ID Album :</label>
                     <input type="text" class="form-control" id="id" formControlName="idAlbum" placeholder="ID">
@@ -48,10 +48,7 @@
                 <div class="form-group">
                     <label for="ket">Keterangan :</label>
                     <input type="text" class="form-control" id="Keterangan" formControlName="keterangan" placeholder="keterangan">
-                    <span
-                        *ngIf="!addAlbumsForm.get('keterangan').valid && addAlbumsForm.get('keterangan').touched" class="help-block">
-                    Keterangan Wajib Diisi
-                    </span>
+                    
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>

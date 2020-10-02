@@ -2,6 +2,8 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
+import Swal from 'sweetalert2';
+import { LablesRekaman } from './lablesRekaman';
 import { LablesRekamanService } from './lablesRekaman.service';
 
 @Component({
@@ -17,6 +19,7 @@ export class LablesRekamanListComponent implements OnInit, AfterViewInit {
     dtOptions: any = {};
     dtTrigger: Subject<any> = new Subject();
     cariForm: FormGroup;
+    listLablesRekaman: LablesRekaman[];
 
     constructor(private lablesRekamanService: LablesRekamanService){
 
@@ -29,54 +32,12 @@ export class LablesRekamanListComponent implements OnInit, AfterViewInit {
             namaLabels: new FormControl('')
         });
 
-        const that = this;
-        this.dtOptions = {
-            ajax: (dataTablesParameters: any, callback) => {
-                const parameter = new Map<string, any>();
-                parameter.set('namaLabels', this.cariForm.controls.namaLabels.value);
-                that.lablesRekamanService.getListLablesRekamanAll(parameter, dataTablesParameters).subscribe(resp => {
-                    callback({
-                        recordsTotal: resp.recordsTotal,
-                        recordsFiltered: resp.recordsFiltered,
-                        data: resp.data,
-                        draw: resp.draw
-                    })
-                })
-            },
-            serverSide: true,
-            processing: true,
-            filter: false,
-            columns: [{
-                title: 'ID',
-                data: 'idLabel',
-                orderable: false
-            }, {
-                title: 'Name',
-                data: 'namaLabels'
-            }, {
-                title: 'Alamat',
-                data: 'alamat'
-            }, {
-                title: 'No Telp',
-                data: 'noTelp'
-            }, {
-                title: 'Contact Person',
-                data: 'contactPerson'
-            }, {
-                title: 'URL Website',
-                data: 'urlWebsite'
-            }, {
-                title: 'Action',
-                orderable: false,
-                render(data, type, row) {
-                    return '<a href="editmethod/${row.idLabel}" class="btn btn-warning btn-xs edit" data-element-id="${row.idLabel}"><i class ="glyphicon glyphicon-edit">Edit</i></a>'
-                }
-            }],
-            rowCallback(row, data, dataIndex) {
-                const idx = ((this.api().page()) * this.api().page.len()) + dataIndex + 1;
-                $('td:eq(0)', row).html('<b>' + idx + '</b>');
-                }
-        };
+        this.lablesRekamanService.listLablesRekaman().subscribe((data)=>{
+            console.log(data);
+            this.listLablesRekaman=data;
+            }, error => {
+                console.log(error);
+            })
         
 
     }
@@ -94,5 +55,38 @@ export class LablesRekamanListComponent implements OnInit, AfterViewInit {
 ngAfterViewInit() {
     
 }
+
+deleteLables(id : number) {
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger'
+      },
+      buttonsStyling: false,
+    });
+    swalWithBootstrapButtons.fire({
+      title: 'Are you sure?',
+      text: 'You want to remove the Catalog!',
+      icon: 'warning',
+      // type: 'warning'
+      showCancelButton: true,
+      showCloseButton: true,
+      confirmButtonText: 'Yes, delete!',
+      cancelButtonText: 'No, cancel!',
+      reverseButtons: true
+    }).then((result) => {
+    console.log(`Delete Data By Id:` + id );
+        if (result.value) {
+            this.lablesRekamanService.deleteLables(id).subscribe(data => {
+                console.log(data);
+                this.refresh();
+            });
+        }
+    });
+  }
+
+  refresh(): void {
+    window.location.reload();
+  }
 
 }

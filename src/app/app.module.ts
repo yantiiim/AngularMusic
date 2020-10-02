@@ -17,6 +17,8 @@ import { AlbumsComponent } from './albums/albums.component';
 import { AlbumsListComponent } from './albums/albumslist.component';
 import { LaguComponent } from './lagu/lagu.component';
 import { LaguListComponent } from './lagu/lagulist.component';
+import { AuthService } from './auth.service';
+import { AuthGuardService } from './authGuard.service';
 
 @NgModule({
   declarations: [
@@ -42,7 +44,7 @@ import { LaguListComponent } from './lagu/lagulist.component';
     HttpClientModule,
     DataTablesModule
   ],
-  providers: [],
+  providers: [AuthService, AuthGuardService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

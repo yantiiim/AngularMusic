@@ -28,6 +28,11 @@ export class LablesRekamanService{
         .pipe(map(data => data as LablesRekaman));
     }
 
+    deleteLables(id): Observable<any>{
+        return this.httpKlien.delete(environment.baseUrl + '/deletelables/'+id)
+        .pipe(map(data => data))
+    }
+
     getListLablesRekamanAll(parameter: Map<string, any>, dataTablesParameters: any): Observable<DataTablesResponse> {
         const dtReq = new DatatablesRequest();
         dtReq.draw = dataTablesParameters.draw;
