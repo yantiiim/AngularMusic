@@ -19,6 +19,7 @@ import { LaguComponent } from './lagu/lagu.component';
 import { LaguListComponent } from './lagu/lagulist.component';
 import { AuthService } from './auth.service';
 import { AuthGuardService } from './authGuard.service';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { AuthGuardService } from './authGuard.service';
     AlbumsComponent,
     AlbumsListComponent,
     LaguComponent,
-    LaguListComponent
+    LaguListComponent,
+    LoginComponent
     
   ],
   imports: [
