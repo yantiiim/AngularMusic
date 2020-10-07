@@ -17,6 +17,7 @@ export class AuthService {
     }
 
     isLogin = false;
+    isLanjut = false;
     // private currentLogin = 'access_token'
 
     login(username: string, password: string): void{
@@ -28,12 +29,10 @@ export class AuthService {
         ).pipe(map(data => data as StatusLogin))
         .subscribe( data => {
             this.isLogin = data.isValid;
-            console.log(data);
             if(this.isLogin){
                 localStorage.setItem('isLogin', 'Y');
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('username', username);
-                console.log(data);
                 this.router.navigate(['/beranda']);
             }
         });
@@ -53,34 +52,23 @@ export class AuthService {
         return statusLogin;
     }
 
-    isAuthorized(): Observable<boolean> {
+    isAuthorized(allowedRoles: string[]): Observable<StatusLogin> {
         const username = localStorage.getItem('username');
         const token = localStorage.getItem('token');
         if(username != null && token != null) {
+            console.log(allowedRoles);
             const userAdmin = new UserAdmin();
             userAdmin.username = username;
             userAdmin.token = token;
             return this.httpKlien.post(environment.baseUrl + '/ceklogin', userAdmin
-            ).pipe(map( data => data as boolean));
+            ).pipe(map( data => data as StatusLogin));
         } else {
-            this.router.navigate(['/login']);
+            this.router.navigate(['login']);
         }
     }
 
     logout(){
-        localStorage.removeItem('isLogin');
-        localStorage.clear();
+        localStorage.removeItem('token');
         this.router.navigate(['/login']);
     }
-
-    // isAuthenticated() {
-    //     const promise = new Promise(
-    //         (resolve, rejects) => {
-    //             setTimeout(() => {
-    //                 resolve(this.loggedIn)
-    //             }, 1000);
-    //         }
-    //     );
-    //     return promise;
-    // }
 }
