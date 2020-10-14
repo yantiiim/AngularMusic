@@ -36,4 +36,21 @@ export class UserManajemenService {
       return this.httpKlien.get(environment.baseUrl + '/listrolesjson')
       .pipe(map(data=> <Roles[]>data));
     }
+
+    checkingSuperAdmin(idUser : string): boolean{
+      let isChecked = false;
+      if(idUser != null){
+        this.httpKlien.post(environment.baseUrl + '/checkingsuperadmin', idUser
+        ).pipe(map(data => data as boolean)).subscribe(data => {
+         if(data = true){
+          isChecked = data;
+          console.log(isChecked);
+          return isChecked;
+         }
+        });
+      } else{
+        isChecked = false;
+      }
+      return isChecked;
+    }
 }

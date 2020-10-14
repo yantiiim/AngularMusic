@@ -20,8 +20,6 @@ import { UserManajemenListComponent } from './userManajemen/userManajemenlist.co
 const routes: Routes = [
   {path: "",redirectTo:"/login",pathMatch:"full"},
   {path: "login",
-   canActivate:[AuthGuardService],
-   data:{allowedRoles: ['role_admin', 'role_user', 'super_admin']},
    component:LoginComponent},
   {path: "beranda",
    canActivate:[AuthGuardService],
