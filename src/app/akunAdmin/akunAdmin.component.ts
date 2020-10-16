@@ -11,7 +11,8 @@ import { AkunAdminService } from './akunAdmin.service';
   })
 
   export class AkunAdminComponent {
-    registerAkunForm: FormGroup
+    registerAkunForm: FormGroup;
+    registerAdminForm: FormGroup;
 
     constructor(private akunAdminService: AkunAdminService, private router: Router){
         

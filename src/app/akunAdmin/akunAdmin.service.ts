@@ -15,4 +15,9 @@ export class AkunAdminService {
         return this.httpKlien.post(environment.baseUrl + '/registerakun', akunAdmin)
         .pipe(map(data => data));
     }
+
+    registerAdmin(akunAdmin: AkunAdmin): Observable<any>{
+        return this.httpKlien.post(environment.baseUrl + '/registeradmin', akunAdmin)
+        .pipe(map(data => data));
+    }
 }

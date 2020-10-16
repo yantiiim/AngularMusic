@@ -1,0 +1,30 @@
+<br><br><br><br>
+<div class="row">
+    <div class="col-md-12">
+        <div *ngFor="let acc of akunAdmin">
+            <p>
+               username :  {{acc.username}}
+            </p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>role</th>
+                        <th>
+                            value
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let role of listRole">
+                        <td>
+                            {{role.namaRole}}
+                        </td>
+                        <td>
+                            <input type="checkbox" [checked]="check(acc.id)">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

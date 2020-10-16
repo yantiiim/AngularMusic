@@ -15,6 +15,7 @@ import { LaguComponent } from './lagu/lagu.component';
 import { LaguListComponent } from './lagu/lagulist.component';
 import { LoginComponent } from './login/login.component';
 import { UserManajemenComponent } from './userManajemen/userManajemen.component';
+import { UserManajemenDetailComponent } from './userManajemen/userManajemenDetail.component';
 import { UserManajemenListComponent } from './userManajemen/userManajemenlist.component';
 
 const routes: Routes = [
@@ -79,14 +80,16 @@ const routes: Routes = [
    component:LaguListComponent},
   {path: "register",
    component:AkunAdminComponent},
-  {path: "usermanajemen",
-   canActivate:[AuthGuardService], 
-   data:{allowedRoles: ['super_admin']}, 
+  {path: "usermanajemen", 
    component:UserManajemenComponent},
   {path: "usermanajemenlist",
    canActivate:[AuthGuardService], 
    data:{allowedRoles: ['super_admin']}, 
-   component:UserManajemenListComponent}
+   component:UserManajemenListComponent},
+   {path: "usermanajemendetail/:id",
+    canActivate:[AuthGuardService],
+    data:{allowedRoles: ['super_admin']},
+    component:UserManajemenDetailComponent}
 ];
 
 @NgModule({

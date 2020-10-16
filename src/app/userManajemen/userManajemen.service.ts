@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 import { AkunAdmin } from '../akunAdmin/akunAdmin';
 import { DatatablesRequest } from '../model/datatablesrequest.model';
 import { DataTablesResponse } from '../model/datatablesresponse.model';
+import { GroupUser } from '../model/groupuser';
 import { Roles } from '../model/roles';
 
 @Injectable({
@@ -17,19 +18,15 @@ export class UserManajemenService {
   
     }
 
-    registerAdmin(akunAdmin: AkunAdmin): Observable<any> {
-      return this.httpKlien.post(environment.baseUrl + '/registeradmin' , akunAdmin)
-      .pipe(map(data => data));
-    }
 
     listAkun(): Observable<AkunAdmin[]>{
       return this.httpKlien.get(environment.baseUrl + '/listakunjson')
       .pipe(map(data=> <AkunAdmin[]>data));
     }
   
-    getAkunById(id): Observable<AkunAdmin>{
+    getAkunById(id): Observable<AkunAdmin[]>{
       return this.httpKlien.get(environment.baseUrl + '/listakunjson/'+id)
-        .pipe(map(data=> data as AkunAdmin));
+        .pipe(map(data=> data as AkunAdmin[]));
     }
   
     listRole(): Observable<Roles[]>{
@@ -37,20 +34,12 @@ export class UserManajemenService {
       .pipe(map(data=> <Roles[]>data));
     }
 
-    checkingSuperAdmin(idUser : string): boolean{
-      let isChecked = false;
+    checkingSuperAdmin(idUser : string): Observable<GroupUser>{
       if(idUser != null){
-        this.httpKlien.post(environment.baseUrl + '/checkingsuperadmin', idUser
-        ).pipe(map(data => data as boolean)).subscribe(data => {
-         if(data = true){
-          isChecked = data;
-          console.log(isChecked);
-          return isChecked;
-         }
-        });
+        return this.httpKlien.post(environment.baseUrl + '/checkingsuperadmin', idUser
+        ).pipe(map( data => data as GroupUser));
       } else{
-        isChecked = false;
+        console.error('error')
       }
-      return isChecked;
     }
 }
